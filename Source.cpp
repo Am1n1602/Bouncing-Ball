@@ -11,7 +11,7 @@ int main()
 	InitWindow(screen_Width, screen_Height, "SimplePhy");
 	SetTargetFPS(60);
 
-	// game loop
+	// game loop 1
 		double time1 = 0.0;
 		double time2 = 0.0;
 		float ballx;
