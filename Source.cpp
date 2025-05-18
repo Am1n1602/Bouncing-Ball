@@ -19,7 +19,7 @@ int main()
     Vector2 ballVel = { 0, 0 };
     const float ballR    = 20.0f;
     const float gravity  = 900.0f;  
-    const float maxSpeed =  1400.0f;  
+    float maxSpeed =  1400.0f;  
 
     // Drag and Launch state
     bool  dragging         = false;
@@ -37,6 +37,24 @@ int main()
         Vector2 mousePos = GetMousePosition();
         float dist = Vector2Distance(mousePos, ballPos);
 
+        // Control max-speed
+
+        if (IsKeyPressed(KEY_W))
+        {
+            maxSpeed += 200.0f;
+            if (maxSpeed >= 4500.0f)
+            {
+                maxSpeed = 4500.0f;
+            }
+        }
+        if (IsKeyPressed(KEY_S))
+        {
+            maxSpeed -= 200.0f;
+            if (maxSpeed <= 400.0f)
+            {
+                maxSpeed = 400.0f;
+            }
+        }
         // Begin dragging if clicked on the ball
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && dist <= ballR)
         {
@@ -63,7 +81,7 @@ int main()
             ballVel.x = -delta.x * 5.0f;
             ballVel.y = -delta.y * 5.0f;
 
-            // Max speed
+            // Max speed 
             if (fabs(ballVel.x) > maxSpeed) ballVel.x = (ballVel.x>0?maxSpeed:-maxSpeed);
             if (fabs(ballVel.y) > maxSpeed) ballVel.y = (ballVel.y>0?maxSpeed:-maxSpeed);
         }
@@ -78,8 +96,8 @@ int main()
             ballVel.x *= 0.99;
             ballVel.y *= 0.99;
 
-            if (fabs(ballVel.x) < 1.0f) ballVel.x = 0;
-            if (fabs(ballVel.y) < 1.0f) ballVel.y = 0;
+            if (fabs(ballVel.x) <= 2.0f) ballVel.x = 0;
+            if (fabs(ballVel.y) <= 2.0f) ballVel.y = 0;
 
             // Move
             ballPos.x += ballVel.x * dt;
@@ -135,7 +153,15 @@ int main()
 
         // Draw the ball
         DrawCircleV(ballPos, ballR, launchEnabled ? RED : (dragging ? BLUE : RED));
-        DrawText(TextFormat("%s", "2D Ball Bouncing"),  screenWidth/2-250, 60, 40, BLACK);
+
+        // Draw the Text
+        DrawText(TextFormat("%s", "2D Bouncing Ball"),  screenWidth/2-250, 60, 40, BLACK);
+        DrawText(TextFormat("%s", "Press W to increase the Max Speed"), (3 * screenWidth / 4)-150, 100, 25, WHITE);
+        DrawText(TextFormat("%s", "Press S to decrease the Max Speed"), (3 * screenWidth / 4) - 150, 130, 25, WHITE);
+        DrawText(TextFormat("%d", (int)maxSpeed/10), 180, 100, 30, RED);
+
+        DrawText(TextFormat("%d", (int)ballVel.x/10), 150, 140, 30, RED);
+        DrawText(TextFormat("%d", (int)ballVel.y/10), 230, 140, 30, RED);
 
         EndDrawing();
     }
