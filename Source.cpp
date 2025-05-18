@@ -7,7 +7,8 @@ int main()
     const int screenHeight = 1000;
     InitWindow(screenWidth, screenHeight, "SimplePhy");
     SetTargetFPS(60);
-
+    InitAudioDevice();
+    Sound bounce = LoadSound("resources/plastic-ball-bounce-14790.wav");
     // Define a box of 20px on each side
     Rectangle bounds = { 20, 20,
                          screenWidth  - 40,
@@ -48,6 +49,7 @@ int main()
         if (dragging)
         {
             dragCurrentPos = mousePos;
+           
         }
 
         // On release, calculate velocity
@@ -76,6 +78,9 @@ int main()
             ballVel.x *= 0.99;
             ballVel.y *= 0.99;
 
+            if (fabs(ballVel.x) < 1.0f) ballVel.x = 0;
+            if (fabs(ballVel.y) < 1.0f) ballVel.y = 0;
+
             // Move
             ballPos.x += ballVel.x * dt;
             ballPos.y += ballVel.y * dt;
@@ -86,22 +91,29 @@ int main()
             {
                 ballPos.x = bounds.x + ballR;
                 ballVel.x *= -1;
+                PlaySound(bounce);
+               
             }
             else if (ballPos.x + ballR >= bounds.x + bounds.width)
             {
                 ballPos.x = bounds.x + bounds.width - ballR;
                 ballVel.x *= -1;
+                PlaySound(bounce);
             }
             // Top/bottom
             if (ballPos.y - ballR <= bounds.y)
             {
                 ballPos.y = bounds.y + ballR;
                 ballVel.y *= -1;
+                PlaySound(bounce);
+               
             }
             else if (ballPos.y + ballR >= bounds.y + bounds.height)
             {
                 ballPos.y = bounds.y + bounds.height - ballR;
                 ballVel.y *= -1;
+                PlaySound(bounce);
+                
             }
         }
 
@@ -127,7 +139,8 @@ int main()
 
         EndDrawing();
     }
-
+    UnloadSound(bounce);
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
