@@ -79,7 +79,7 @@ g++ source.cpp -o bouncing-ball -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 - **Bounce:** The ball will bounce off the walls and be pulled down by gravity.
 - **Listen:** Each wall collision triggers a damp sound effect.
 
-## Screenshots
+## Demo
 ![](bouncing-ball.gif)
 
 ## Issues
